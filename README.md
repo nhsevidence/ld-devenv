@@ -1,6 +1,6 @@
 # Linked-data development environment
 
-This project contains the development environment for the NICE linked data projects.  It's an ubuntu 14.04 LTS vm with all development tool dependancies (docker, nodejs, f#, mono) installed along with the spacemacs editor.
+This project contains the virtualised development environment for the NICE linked data projects.  The environment is an ubuntu 14.04 LTS virtual machine with all development tool dependancies (docker, nodejs, f#, mono) installed along with the spacemacs editor.
 
 ## Setting up with Vagrant
 
