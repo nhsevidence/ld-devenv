@@ -1,14 +1,14 @@
-# NICE linked-data development environment
+# Linked-data development environment
 
-This project contains the development environment for the NICE linked data projects.  It's an ubuntu 14.04 LTS vm with all development tool dependancies (docker, nodejs, f#, mono) installed along with the spacemacs editor.
+This project contains the virtualised development environment for the NICE linked data projects.  The environment is an ubuntu 14.04 LTS desktop virtual machine with all development tool dependancies (docker, nodejs, f#, mono) installed along with the spacemacs editor.
 
 ## Setting up with Vagrant
 
 ### Prerequisites
 
 You will need to have the following software installed on your development machine: 
-* Virtualbox 
-* Vagrant
+* Virtualbox ( >= 4.3.28)
+* Vagrant (>= 1.7)
 
 I suggest you use your native/favourite package manager to install these (for windows see [chocolately](https://chocolatey.org/), Mac OSX: [homebrew](), linux: apt-get :))
 
@@ -29,7 +29,7 @@ to launch spacemacs.  This will install a load of plugins on first load but will
 
 ### Troubleshooting
 
-This has been tested with Virtualbox 4.3.28 and Vagrant 1.7.3 but should work with latest versions
+This has been tested with Virtualbox 4.3.28 and Vagrant 1.7.3 but may work with earlier/later versions
 
 #### Docker issues
 If you have problems with docker run saying the daemon is not running or permissions issues, log out of the ubuntu vm and log back in again
