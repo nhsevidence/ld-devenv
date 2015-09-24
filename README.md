@@ -7,7 +7,7 @@ This project contains the virtualised development environment for the NICE linke
 ### Prerequisites
 
 You will need to have the following software installed on your development machine: 
-* Virtualbox ( >= 4.3.28)
+* Virtualbox (It works with >= 4 but i recommend 5 to maximise compatibility with the version of guest additions - version 5 -  installed on the vm)
 * Vagrant (>= 1.7)
 
 I suggest you use your native/favourite package manager to install these (for windows see [chocolately](https://chocolatey.org/), Mac OSX: [homebrew](), linux: apt-get :))
@@ -29,7 +29,7 @@ to launch spacemacs.  This will install a load of plugins on first load but will
 
 ### Troubleshooting
 
-This has been tested with Virtualbox 4.3.28 and Vagrant 1.7.3 but may work with earlier/later versions
+This has been tested with Virtualbox 5 and Vagrant 1.7.3 but may work with earlier/later versions
 
 #### Docker issues
 If you have problems with docker run saying the daemon is not running or permissions issues, log out of the ubuntu vm and log back in again
