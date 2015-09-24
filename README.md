@@ -12,7 +12,23 @@ You will need to have the following software installed on your development machi
 
 I suggest you use your native/favourite package manager to install these (for windows see [chocolately](https://chocolatey.org/), Mac OSX: [homebrew](), linux: apt-get :))
 
-## Creating the environment from scratch
+## Using the prebuild box
+
+Grab the prebuild box from O:\KnowledgeBase-QS\ld-devenv.box (this is currently an NICE internal only link) and put it somewhere on your machine.  Open a command prompt/terminal in this directory and run:
+
+```
+vagrant box add ld-devenv.box
+```
+
+Now run up the environment:
+
+Open a command prompt/terminal in the root of this repository and run:
+
+```
+vagrant up
+```
+
+## Or, build the environment from scratch
 
 Open a command prompt/terminal in the root of this repository and run:
 ```
@@ -26,6 +42,9 @@ emacs
 ```
 to launch spacemacs.  This will install a load of plugins on first load but will be quicker on subsequent loads.
 
+## Important points
+
+Dont forget to set your git config user and email!
 
 ### Troubleshooting
 
