@@ -5,6 +5,10 @@ function install_docker_compose(){
   chmod +x /usr/local/bin/docker-compose
 }
 
+function install_docker_machine(){
+  curl -L https://github.com/docker/machine/releases/download/v0.4.0/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
+  chmod +x /usr/local/bin/docker-machine
+}
 
 function install_emacs24-4(){
   emacs --version
@@ -46,6 +50,7 @@ function main(){
   ln /usr/bin/nodejs /usr/bin/node
 
   install_docker_compose
+  install_docker_machine
 
   apt-get clean
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
