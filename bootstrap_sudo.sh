@@ -41,7 +41,7 @@ function main(){
   echo "deb http://download.mono-project.com/repo/debian wheezy/snapshots/3.12.0 main" > /etc/apt/sources.list.d/mono-xamarin.list
   apt-get update
   apt-get install -yy mono-devel ca-certificates-mono fsharp mono-vbnc nuget
-  apt-get install -yy default-jre git graphviz raptor-utils python make g++ inotify-tools pandoc pandoc-citeproc nodejs npm
+  apt-get install -yy default-jre git graphviz raptor-utils python make g++ inotify-tools pandoc pandoc-citeproc nodejs npm compizconfig-settings-manager
 
   install_emacs24-4
   install_spacemacs
