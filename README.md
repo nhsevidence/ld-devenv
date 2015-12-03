@@ -44,7 +44,10 @@ to launch spacemacs.  This will install a load of plugins on first load but will
 
 ## Important points
 
-Dont forget to set your git config user and email!
+Dont forget to set your git config user and email!  You will want to fix redraw issues if you encounter the screen not updating properly (see section below).
+
+## Fixing redraw issues
+Within ubuntu press the launch command button at the top left of the task bar (in its original position).  Then type 'cssm' to launch the Compiz Config Settings manager.  Click on 'Utility' -> 'WorkArounds' (click the label here) -> 'Force full screen redraws on repaint'.  No need save, just close the window.  Redraws should be fixed.
 
 ### Troubleshooting
 
