@@ -20,6 +20,17 @@ Grab the prebuild box from O:\KnowledgeBase-QS\ld-devenv.box (this is currently 
 vagrant box add ld-devenv.box
 ```
 
+### Specifiy a shared folder between host and guest vm (optional)
+
+
+To specify a folder to share set the environment variables VAGRANT_SYNC_SRC and VAGRANT_SYNC_DEST before running the vagrant up command.  This is recommended if you dont want to worry about losing work if there is a problem with your vm/virtualbox.
+For example to share a src directory from C:\src to /src in the vm you need to set:
+
+```
+set VAGRANT_SYNC_SRC=C:\src
+set VAGRANT_SYNC_DEST=/src
+```
+
 Now run up the environment:
 
 Open a command prompt/terminal in the root of this repository and run:
