@@ -10,6 +10,22 @@ function install_docker_machine(){
   chmod +x /usr/local/bin/docker-machine
 }
 
+function install_emacs24-5(){
+  emacs --version
+  if [ $? -ne 0 ]; then
+    apt-get install -yy build-essential libgtk2.0-dev libgif-dev libjpeg62-dev libpng12-dev libxpm-dev libncurses-dev
+    apt-get build-dep emacs25
+    wget http://ftp.gnu.org/gnu/emacs/emacs-24.5.tar.gz
+    tar -xzvf emacs-24.5.tar.gz
+    rm emacs-24.5.tar.gz
+    cd emacs-24.5
+    ./configure --prefix=/opt/emacs --with-tiff=no
+    make && make install
+    cd ..
+    ln -s /opt/emacs/bin/emacs-24.5 /usr/local/bin/emacs
+  fi
+}
+
 function install_emacs24-4(){
   emacs --version
   if [ $? -ne 0 ]; then
@@ -32,22 +48,28 @@ function install_spacemacs(){
   chown -R vagrant /home/vagrant/.emacs.d /home/vagrant/.spacemacs
 }
 
+function install_tmux() {
+  sudo apt-get install -y vim tmux
+}
+
 function main(){
   apt-get update
   apt-get install -y wget
 
-  apt-get update && apt-key adv --keyserver pgp.mit.edu --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+  echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
 
-  echo "deb http://download.mono-project.com/repo/debian wheezy/snapshots/3.12.0 main" > /etc/apt/sources.list.d/mono-xamarin.list
   apt-get update
   apt-get install -yy mono-devel ca-certificates-mono fsharp mono-vbnc nuget
   apt-get install -yy git raptor-utils make g++ compizconfig-settings-manager
 
-  install_emacs24-4
+  install_emacs24-5
   install_spacemacs
 
   install_docker_compose
   install_docker_machine
+
+  install_tmux
 
   apt-get clean
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
