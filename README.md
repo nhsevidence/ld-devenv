@@ -60,6 +60,9 @@ Dont forget to set your git config user and email!  You will want to fix redraw 
 ## Fixing redraw issues
 Within ubuntu press the launch command button at the top left of the task bar (in its original position).  Then type 'cssm' to launch the Compiz Config Settings manager.  Click on 'Utility' -> 'WorkArounds' (click the label here) -> 'Force full screen redraws on repaint'.  No need save, just close the window.  Redraws should be fixed.
 
+## For Mac Users
+If you are setting this up on a mac for the first time with virtualbox you may find the left command key unresponsive in the VM.  This is due to virtualbox using it as a host key.  To resolve simply go to virualbox-> preferences.  Input tab -> Virtual machine and change the host key to the right command (or whatever is desired).  The VM should then instantly map the left command key to ctrl.
+
 ### Troubleshooting
 
 This has been tested with Virtualbox 5.0.4.102546 and Vagrant 1.7.4 but may work with earlier/later versions
