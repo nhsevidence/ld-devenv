@@ -8,6 +8,11 @@ function install_docker(){
   fi
 }
 
+function install_rancher_server(){
+   RANCHER_SERVER_VERSION=v0.56.1
+   sudo docker run -d --restart=always -p 8080:8080 rancher/server:$RANCHER_SERVER_VERSION
+}
+
 function main(){
   install_docker
 }

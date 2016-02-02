@@ -10,6 +10,17 @@ function install_docker_machine(){
   chmod +x /usr/local/bin/docker-machine
 }
 
+function install_rancher_compose(){
+    RANCHER_COMPOSE_VERSION=v0.7.1
+
+    curl -L https://github.com/rancher/rancher-compose/releases/download/$RANCHER_COMPOSE_VERSION/rancher-compose-linux-amd64-$RANCHER_COMPOSE_VERSION.tar.gz > rancher-compose.tar.gz
+    tar -xf rancher-compose.tar.gz
+    cd rancher-compose-$RANCHER_COMPOSE_VERSION
+    rm -f /usr/local/bin/rancher-compose
+    ln rancher-compose /usr/local/bin/rancher-compose
+    rm -f rancher-compose*
+}
+
 function install_emacs24-4(){
   emacs --version
   if [ $? -ne 0 ]; then
