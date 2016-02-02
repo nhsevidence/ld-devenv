@@ -15,6 +15,7 @@ function install_rancher_server(){
 
 function main(){
   install_docker
+  install_rancher_server
 }
 
 main
