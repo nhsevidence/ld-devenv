@@ -39,7 +39,9 @@ function install_emacs24-5(){
 
 function install_spacemacs(){
   git clone --recursive https://github.com/syl20bnr/spacemacs /home/vagrant/.emacs.d
-  wget -O /home/vagrant/.spacemacs https://raw.githubusercontent.com/ryansroberts/dotfiles/master/.spacemacs
+  cd /home/vagrant/.emacs.d
+  git reset --hard 0562f050b4b56470dc68744667794b20abe9570a
+  wget -O /home/vagrant/.spacemacs https://raw.githubusercontent.com/nhsevidence/dotfiles/e21495af8ff8ac9b4b205f83959e5f8e34a1971c/.spacemacs
   chown -R vagrant /home/vagrant/.emacs.d /home/vagrant/.spacemacs
 }
 
