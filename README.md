@@ -65,13 +65,13 @@ Goto url in your browser within your VM
 localhost:8080
 ```
 
-Now click on Infrastructure -> Hosts -> Add Host.  You will be prompted the first time to enter your Host Registration URL, which is different from localhost.  You need to get the ip address of the docker container running the rancher server.  You can do this using:
+Now click on *Infrastructure -> Hosts -> Add Host*.  You will be prompted the first time to enter your Host Registration URL, which is different from localhost.  You need to get the ip address of the docker container running the rancher server.  You can do this using:
 ```
 docker ps
 docker inspect <name_of_container_running_rancher_server> | grep IPAddress
 ```
 Now paste the IP for the rancher container into the custom URL box (dont forget the port!).  It should be something like http://172.17.0.2:8080.  Now click save.
-You should now select a new 'Custom' host and grab the command it produces for you.  This command will be unique to your setup and contains gdynamically generated codes.  Which loooks something like this (you will need to modify it though, see below):
+You should now select a new *'Custom'* host and grab the command it produces for you.  This command will be unique to your setup and contains gdynamically generated codes.  Which loooks something like this (you will need to modify it though, see below):
 ```
 sudo docker run -d --privileged -v /var/run/docker.sock:/var/run/docker.sock rancher/agent:v0.8.2 http://172.17.0.2:8080/v1/scripts/2D4EB6D9DFA6BE1E61D5:1454670000000:5scsHZbSvsPruECHdQVTN2YE7E
 ```
