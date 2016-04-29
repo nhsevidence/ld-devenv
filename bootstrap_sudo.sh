@@ -58,6 +58,7 @@ function main(){
 
   apt-get update
   apt-get install -yy mono-devel ca-certificates-mono fsharp mono-vbnc nuget
+  apt-get install -yy monodevelop monodevelop-nunit
   apt-get install -yy git raptor-utils make g++ compizconfig-settings-manager
 
   install_emacs24-5
@@ -72,7 +73,7 @@ function main(){
   apt-get clean
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-  chown -R vagrant /home/vagrant 
+  chown -R vagrant /home/vagrant
 }
 
 main
