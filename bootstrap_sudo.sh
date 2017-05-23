@@ -1,8 +1,27 @@
 #!/usr/bin/env bash
 
 function install_docker_compose(){
-  curl -L https://github.com/docker/compose/releases/download/1.3.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+  curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
   chmod +x /usr/local/bin/docker-compose
+}
+
+function install_docker(){
+  docker --version
+  if [ $? -ne 0 ]; then
+    wget -qO- https://get.docker.com/ | sh
+    usermod -aG docker vagrant
+  fi
+  chown -R vagrant /usr/local/bin/docker
+}
+
+function install_rancher_server(){
+   RANCHER_SERVER_VERSION=v0.56.1
+   sudo docker run -d --restart=always -p 8080:8080 rancher/server:$RANCHER_SERVER_VERSION
+}
+
+function main(){
+  install_docker
+  install_rancher_server
 }
 
 function install_docker_machine(){
@@ -63,6 +82,8 @@ function main(){
 
   install_emacs24-5
   install_spacemacs
+
+  install_docker
 
   install_docker_compose
   install_docker_machine
