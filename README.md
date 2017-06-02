@@ -10,6 +10,8 @@ You will need to have the following software installed on your development machi
 * Virtualbox (It works with >= 4 but i recommend 5 to maximise compatibility with the version of guest additions - version 5 -  installed on the vm)
 * Vagrant (>= 1.7.4)
 
+You will also need you id_rsa & id_rsa.pub setup [Seting up ssh keys](https://help.github.com/articles/generating-an-ssh-key/)
+
 I suggest you use your native/favourite package manager to install these (for windows see [chocolately](https://chocolatey.org/), Mac OSX: [homebrew](), linux: apt-get :))
 
 ## Using the prebuild box
