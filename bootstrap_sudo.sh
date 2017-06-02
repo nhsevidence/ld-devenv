@@ -5,6 +5,12 @@ function install_docker_compose(){
   chmod +x /usr/local/bin/docker-compose
 }
 
+function install_sublime(){
+  sudo add-apt-repository ppa:webupd8team/sublime-text-3
+  sudo apt-get update
+  sudo apt-get install sublime-text-installer
+}
+
 function install_docker(){
   docker --version
   if [ $? -ne 0 ]; then
@@ -74,7 +80,7 @@ function main(){
 
   sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
   echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
-
+  
   apt-get update
   apt-get install -yy mono-devel ca-certificates-mono fsharp mono-vbnc nuget
   apt-get install -yy monodevelop monodevelop-nunit
@@ -82,7 +88,7 @@ function main(){
 
   install_emacs24-5
   install_spacemacs
-
+  install_sublime
   install_docker
 
   install_docker_compose
