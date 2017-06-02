@@ -13,9 +13,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.hostname = "ld-devenv"
+	config.vm.provision "file", source: "dotfiles/bashrc", destination: ".bashrc"
   config.vm.provision "shell", path: "bootstrap_sudo.sh"
   # config.vm.provision "shell", path: "bootstrap.sh", privileged: false
-  config.vm.provision "file", source: "dotfiles/bashrc", destination: ".bashrc"
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
   config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
   if !ENV["VAGRANT_SYNC_SRC"].nil? && !ENV["VAGRANT_SYNC_DEST"].nil?
