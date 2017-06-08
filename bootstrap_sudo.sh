@@ -71,6 +71,10 @@ function install_spacemacs(){
 }
 
 function install_tmux() {
+  sudo apt-get install -y zsh
+}
+
+function install_tmux() {
   sudo apt-get install -y vim tmux
 }
 
@@ -90,6 +94,7 @@ function main(){
   install_spacemacs
   install_sublime
   install_docker
+  install_zsh  
 
   install_docker_compose
   install_docker_machine
