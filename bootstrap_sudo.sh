@@ -70,8 +70,10 @@ function install_spacemacs(){
   chown -R vagrant /home/vagrant/.emacs.d /home/vagrant/.spacemacs
 }
 
-function install_tmux() {
+function install_zsh() {
   sudo apt-get install -y zsh
+  chsh -s $(which zsh)
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 }
 
 function install_tmux() {
