@@ -1,1 +1,9 @@
 .vagrant/
+.idea
+/id_rsa
+/id_rsa.pub
+/.Vagrantfile.swp
+/playbook-base.retry
+/playbook-bnf.retry
+/ubuntu-xenial-16.04-cloudimg-console.log
+/.Trash-1000/
