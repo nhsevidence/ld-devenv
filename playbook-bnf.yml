@@ -67,3 +67,13 @@
       with_items:
         - docker exec bnf_build_1 ./build.sh
         - docker exec bnf_build_1 ./populate-elastic.sh
+
+    - name: Run ElasticHQ container
+      docker_container:
+        name: elastichq
+        image: elastichq/elasticsearch-hq
+        restart_policy: always
+        ports:
+          - "5000:5000"
+        env:
+          HQ_DEFAULT_URL: "http://172.17.0.1:9200/"
