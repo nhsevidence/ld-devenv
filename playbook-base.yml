@@ -67,6 +67,10 @@
       apt:
         update_cache: yes
 
+    - name: Get kernel version
+      shell: uname -r
+      register: kernelversion
+
     - name: Install essential packages with apt
       become: yes
       apt: name={{item}} state=present install_recommends=yes
@@ -74,6 +78,7 @@
         - apt-transport-https
         - build-essential
         - linux-headers-generic
+        - linux-headers-{{kernelversion.stdout}}
         - dkms
         - tar
         - gpgv2
@@ -82,6 +87,7 @@
         - curl
         - make
         - gcc
+        - perl
         - openssl
         - g++
         - software-properties-common
@@ -103,14 +109,15 @@
         - monodevelop-nunit
         - fsharp
         - raptor-utils
+        - nodejs
         - sublime-text
         - docker-ce=17.03.2~ce-0~ubuntu-xenial
-        - virtualbox-guest-utils
-#        - virtualbox-guest-additions-iso
-#        - virtualbox-guest-x11
-        - virtualbox-guest-dkms
         - zsh
         - fish
+
+    - name: Block docker updates
+      become: yes
+      command: apt-mark hold docker-ce
 
     - name: Remove packages with apt
       become: yes
@@ -206,7 +213,7 @@
         dest: ~/.ssh/id_rsa.pub
         mode: 0600
 
-    - name: Set authorized key took from file
+    - name: Set authorized key from file
       authorized_key:
         user: vagrant
         state: present

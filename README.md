@@ -1,8 +1,11 @@
 # Linked-data development environment
 
-This project contains the virtualised development environment for the NICE linked data projects.
-It's an Ubuntu 16.04 LTS desktop virtual machine with several programming languages, runtimes and development tools installed.
-It's configured using [Vagrant](https://www.vagrantup.com) and [Ansible](https://docs.ansible.com/).
+This project contains the virtualised development environment for the
+NICE linked data projects.
+It's an Ubuntu 16.04 LTS desktop virtual machine with several
+programming languages, runtimes and development tools installed.
+It's configured using [Vagrant](https://www.vagrantup.com) and
+ [Ansible](https://docs.ansible.com/).
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -41,9 +44,9 @@ It's configured using [Vagrant](https://www.vagrantup.com) and [Ansible](https:/
     - [zsh](http://zsh.sourceforge.net/)
 - Containerisation
     - [Docker 17.03.2](https://docs.docker.com/)
-    - [Docker compose](https://docs.docker.com/compose/overview/)
+    - [Docker Compose 1.21.2](https://docs.docker.com/compose/overview/)
     - [Rancher 1.6](https://rancher.com/docs/rancher/v1.6/en/)
-    - [Rancher Compose](https://rancher.com/docs/rancher/v1.6/en/cattle/rancher-compose/)
+    - [Rancher Compose 0.12.5](https://rancher.com/docs/rancher/v1.6/en/cattle/rancher-compose/)
 
 ## Initial Setup
 
@@ -51,7 +54,7 @@ It's configured using [Vagrant](https://www.vagrantup.com) and [Ansible](https:/
 
 You will need to have the following software installed on your development machine: 
 - [Virtualbox v5.x](https://www.virtualbox.org/wiki/Downloads)
-- [Vagrant v2.x](https://www.vagrantup.com/downloads.html)
+- [Vagrant v2.1.2](https://www.vagrantup.com/downloads.html)
 - SSH keys (see below)
 
 ### Generate and copy SSH keys
@@ -62,17 +65,16 @@ You will need to have the following software installed on your development machi
 
 ### Run the environment
 
-On your host, open a command prompt/terminal in the root of this repository and run the following:
+On your host, open a command prompt/terminal in the root of this
+repository and run the following:
 
-- Install the vagrant-disksize plugin to be able to increase the VM size
-    ```
-    vagrant plugin install vagrant-disksize
-    ```
-- Setup up the environment. The guest VM will start and and Ansible will setup the environment.
+- Setup up the environment. The guest VM will start and and Ansible
+will setup the environment.
     ```
     vagrant up
     ```
-- After the environment setup has finished you should the number of successful steps done
+- After the environment setup has finished you should the number of
+successful steps done
     ```
     ld-devenv  :  ok=34
     ```
@@ -109,12 +111,34 @@ Open a terminal in your guest VM and do the following:
     git config --global user.email
     ```
 
+### Share folders and clipboard between host and guest VM (optional)
+
+You can share folders and the clipboard between the host and the guest VM.
+
+- In your VM menu go to `Devices -> Shared Clipboard`. Select `Bidirectional`
+
+- In your VM menu go to `Devices -> Drag and Drop`. Select `Bidirectional`
+
+- In your VM menu go to `Devices -> Insert Guest Additions CD image...`.
+You should see a CD autorun in your VM
+
+- Click `Run` and input `vagrant` as a password when requested.
+You should see a terminal installing the Guest Additions
+
+- Go into the `Vagrantfile` at the root of this repo and uncomment and
+change the property `config.vm.synced_folder` to the desired folder in
+your host (left side path)
+
+- Reload the VM by doing `vagrant reload` in your host
+
 ### Setup Rancher container service (optional)
 
-The Rancher server is installed automatically but you will need to do a little manual setup to install the rancher agent before using rancher.
+The Rancher server is installed automatically but you will need to do a
+little manual setup to install the rancher agent before using rancher.
 
 #### Configuring rancher agent
-- Check that Rancher is running in docker. You should see a `rancher/server` container running on port `8888`
+- Check that Rancher is running in docker. You should see a `rancher/server`
+container running on port `8888`
     ```
     docker ps -f name=rancher
     ```
@@ -122,36 +146,43 @@ The Rancher server is installed automatically but you will need to do a little m
     ```
     ifconfig | grep docker0 -A 1
     ```
-- Go to the following URL in your guest VM browser, where the IP is the one above, e.g.:
+- Go to the following URL in your guest VM browser, where the IP is the
+one above, e.g.:
     ```
     http://172.17.0.1:8888
     ```
 - Click on *Infrastructure -> Hosts -> Add Host*
-- You will be prompted the first time to enter your Host Registration URL. Make sure it's the same as the one above and click *Save*.
-- Select a new *'Custom'* host and follow the instructions on the page, copying, pasting and running the displayed command in the terminal.
-- When you click *Close* on the Rancher UI, you will be directed back to the Infrastructure -> Hosts view, where the host will automatically appear.
-
-### Share folders between host and guest VM (optional)
-
-You can share a folder between the host and the guest VM.
-
-Go into the `Vagrantfile` and uncomment and change the property `config.vm.synced_folder` to the desired folder in your host (left side path)
-
+- You will be prompted the first time to enter your Host Registration URL.
+Make sure it's the same as the one above and click *Save*.
+- Select a new *'Custom'* host and follow the instructions on the page,
+copying, pasting and running the displayed command in the terminal.
+- When you click *Close* on the Rancher UI, you will be directed back to
+the Infrastructure -> Hosts view, where the host will automatically appear.
 
 ## Troubleshooting
 
 ### For Windows users
-The VM might lose its network connection if your Windows machine goes to sleep.
+- The VM might lose its network connection if your Windows machine goes to sleep.
 
-If that happens on your host, open a command prompt/terminal in the root of this repository and run the following:
+    If that happens on your host, open a command prompt/terminal in the
+    root of this repository and run the following:
 
-```
-vagrant halt
-vagrant up
-```
+    ```
+    vagrant halt
+    vagrant up
+    ```
+
+- Gedit (the default text editor) isn't able to save files to shared folders.
+
+    Use Sublime Text or Mono Develop when editing files in the shared folders.
 
 ### For Mac Users
-If you are setting this up on a mac for the first time with virtualbox you may find the left command key unresponsive in the VM. This is due to virtualbox using it as a host key.
+If you are setting this up on a mac for the first time with virtualbox
+you may find the left command key unresponsive in the VM.
+This is due to virtualbox using it as a host key.
 
-To resolve simply go to *Virtualbox -> Preferences -> Input tab -> Virtual machine tab* and change the *Host Key Combination* to the right command (or whatever is desired).  The VM should then instantly map the left command key to ctrl.
+To resolve simply go to
+*Virtualbox -> Preferences -> Input tab -> Virtual machine tab*
+and change the *Host Key Combination* to the right command (or whatever is desired).
+The VM should then instantly map the left command key to ctrl.
 
