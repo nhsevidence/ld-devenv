@@ -19,6 +19,8 @@ Vagrant.configure("2") do |config|
     vb.memory = 6100
     vb.cpus = 2
     vb.customize ["modifyvm", :id, "--vram", "32"]
+    vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+    vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
     vb.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", "1", "--device", "0", "--type", "dvddrive", "--medium", "emptydrive"]
   end
 

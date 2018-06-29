@@ -29,6 +29,9 @@ It's configured using [Vagrant](https://www.vagrantup.com) and
 
 ## What's in the box
 
+- Base Box
+    - [Bento project](https://app.vagrantup.com/bento)
+[Ubuntu 16.04 LTS](https://app.vagrantup.com/bento/boxes/ubuntu-16.04/versions/201806.08.0)
 - Languages and runtimes
     - [Node.js 8.x](https://nodejs.org/en/)
     - [Mono 5.x](http://www.mono-project.com/)
@@ -76,7 +79,7 @@ will setup the environment.
 - After the environment setup has finished you should the number of
 successful steps done
     ```
-    ld-devenv  :  ok=34
+    ld-devenv  :  ok=36
     ```
 - Restart the environment to use the Ubuntu GUI
     ```
@@ -111,13 +114,9 @@ Open a terminal in your guest VM and do the following:
     git config --global user.email
     ```
 
-### Share folders and clipboard between host and guest VM (optional)
+### Share folders between host and guest VM (optional)
 
-You can share folders and the clipboard between the host and the guest VM.
-
-- In your VM menu go to `Devices -> Shared Clipboard`. Select `Bidirectional`
-
-- In your VM menu go to `Devices -> Drag and Drop`. Select `Bidirectional`
+You can share folders between the host and the guest VM.
 
 - In your VM menu go to `Devices -> Insert Guest Additions CD image...`.
 You should see a CD autorun in your VM
@@ -125,11 +124,14 @@ You should see a CD autorun in your VM
 - Click `Run` and input `vagrant` as a password when requested.
 You should see a terminal installing the Guest Additions
 
-- Go into the `Vagrantfile` at the root of this repo and uncomment and
+- Edit the `Vagrantfile` at the root of this repo. Uncomment and
 change the property `config.vm.synced_folder` to the desired folder in
 your host (left side path)
 
 - Reload the VM by doing `vagrant reload` in your host
+
+- The contents of your shared folder should appear in the `Shared`
+folder of the guest's `Home` directory
 
 ### Setup Rancher container service (optional)
 
@@ -158,6 +160,51 @@ Make sure it's the same as the one above and click *Save*.
 copying, pasting and running the displayed command in the terminal.
 - When you click *Close* on the Rancher UI, you will be directed back to
 the Infrastructure -> Hosts view, where the host will automatically appear.
+
+## Use a prepackaged box
+
+A prepackaged box has been made available which has all the software
+installed and rancher already configured.
+
+- To add a shared folder, edit the `Vagrantfile` in prepackaged directory,
+e.g.: `C:\_src\ld-devenv\prepackaged\Vagrantfile`. Uncomment and change
+the property `config.vm.synced_folder` to the desired folder in
+your host (left side path) (Optional)
+
+- Go to `O:\ld-devenv` and copy the `ld-devenv.box` file to a directory of your choice, e.g. `C:\_src`
+
+- Open a command prompt/terminal and go to that directory
+    ```
+    cd C:\_src
+    ```
+
+- In the command prompt/terminal run
+    ```
+    vagrant box add --name ld-devenv ld-devenv.box
+    ```
+
+- Open a command prompt/terminal and go the `Prepackaged` directory of this repository, e.g.:
+    ```
+    cd C:\_src\ld-devenv\prepackaged
+    ```
+
+- In the command prompt/terminal run :
+    ```
+    vagrant up
+    ```
+
+- Copy your SSH keys to `/home/vagrant/.ssh`. (see above for instructions on SSH.
+The `.ssh` directory is hidden by default in the vagrant user `Home` directory.
+In your guest file manager go to *View -> Show Hidden Files* to see it)
+
+- Setup your git username and email (see above for instructions)
+
+- The contents of your shared folder should appear in the `Shared`
+folder of the guest's `Home` directory
+
+- To access Rancher go to `http://172.17.0.1:8888`
+and login with the user and password `vagrant`
+
 
 ## Troubleshooting
 
