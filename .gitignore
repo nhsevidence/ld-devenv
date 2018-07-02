@@ -2,8 +2,8 @@
 .idea
 /id_rsa
 /id_rsa.pub
-/.Vagrantfile.swp
+/ld-devenv.box
 /playbook-base.retry
 /playbook-bnf.retry
-/ubuntu-xenial-16.04-cloudimg-console.log
+/.Vagrantfile.swp
 /.Trash-1000/

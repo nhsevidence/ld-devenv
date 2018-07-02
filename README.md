@@ -12,15 +12,18 @@ It's configured using [Vagrant](https://www.vagrantup.com) and
 **Table of Contents**
 
 - [What's in the box](#whats-in-the-box)
-- [Initial Setup](#initial-setup)
-  - [Prerequisites](#prerequisites)
-  - [Generate and copy SSH keys](#generate-and-copy-ssh-keys)
-  - [Run the environment](#run-the-environment)
-- [Post-setup](#post-setup)
-  - [Setup Git username and email](#setup-git-username-and-email)
-  - [Setup Rancher container service (optional)](#setup-rancher-container-service-optional)
-    - [Configuring rancher agent](#configuring-rancher-agent)
-  - [Share folders between host and guest VM (optional)](#share-folders-between-host-and-guest-vm-optional)
+- [Prerequisites](#prerequisites)
+  - [Generate SSH keys](#generate-ssh-keys)
+- [Usage](#usage)
+  - [Virtual Machine Setup](#virtual-machine-setup)
+    - [Copy SSH keys](#copy-ssh-keys)
+    - [Run the environment](#run-the-environment)
+    - [Post-setup](#post-setup)
+      - [Setup Git username and email](#setup-git-username-and-email)
+      - [Share folders between host and guest VM (optional)](#share-folders-between-host-and-guest-vm-optional)
+      - [Setup Rancher container service (optional)](#setup-rancher-container-service-optional)
+  - [Prepackaged Virtual Machine Setup](#prepackaged-virtual-machine-setup)
+- [Package the development environment box](#package-the-development-environment-box)
 - [Troubleshooting](#troubleshooting)
   - [For Windows users](#for-windows-users)
   - [For Mac Users](#for-mac-users)
@@ -51,22 +54,31 @@ It's configured using [Vagrant](https://www.vagrantup.com) and
     - [Rancher 1.6](https://rancher.com/docs/rancher/v1.6/en/)
     - [Rancher Compose 0.12.5](https://rancher.com/docs/rancher/v1.6/en/cattle/rancher-compose/)
 
-## Initial Setup
+## Prerequisites
 
-### Prerequisites
-
-You will need to have the following software installed on your development machine: 
+You will need to have the following software installed on your development machine:
 - [Virtualbox v5.x](https://www.virtualbox.org/wiki/Downloads)
 - [Vagrant v2.1.2](https://www.vagrantup.com/downloads.html)
 - SSH keys (see below)
 
-### Generate and copy SSH keys
+### Generate SSH keys
 
-- Follow [these instructions](https://help.github.com/articles/connecting-to-github-with-ssh/) to generate your SSH keys (if needed) and adding them to Github
-- Copy the private and public keys to the root directory of this repository
+- Follow [these instructions](https://help.github.com/articles/connecting-to-github-with-ssh/) to
+generate your SSH keys (if needed) and adding them to Github
+
+## Usage
+
+You can setup your own VM or use a prepackaged box.
+See below for details on how to use each of these options.
+
+### Virtual Machine Setup
+
+#### Copy SSH keys
+
+- Copy your Github private and public keys to the root directory of this repository
 - Rename the keys to `id_rsa` and `id_rsa.pub` respectively
 
-### Run the environment
+#### Run the environment
 
 On your host, open a command prompt/terminal in the root of this
 repository and run the following:
@@ -94,9 +106,9 @@ successful steps done
     vagrant up
     ```
 
-## Post-setup
+#### Post-setup
 
-### Setup Git username and email
+##### Setup Git username and email
 
 Open a terminal in your guest VM and do the following:
 
@@ -114,7 +126,7 @@ Open a terminal in your guest VM and do the following:
     git config --global user.email
     ```
 
-### Share folders between host and guest VM (optional)
+##### Share folders between host and guest VM (optional)
 
 You can share folders between the host and the guest VM.
 
@@ -133,12 +145,12 @@ your host (left side path)
 - The contents of your shared folder should appear in the `Shared`
 folder of the guest's `Home` directory
 
-### Setup Rancher container service (optional)
+##### Setup Rancher container service (optional)
 
 The Rancher server is installed automatically but you will need to do a
 little manual setup to install the rancher agent before using rancher.
+Do the following to setup a rancher host:
 
-#### Configuring rancher agent
 - Check that Rancher is running in docker. You should see a `rancher/server`
 container running on port `8888`
     ```
@@ -161,7 +173,7 @@ copying, pasting and running the displayed command in the terminal.
 - When you click *Close* on the Rancher UI, you will be directed back to
 the Infrastructure -> Hosts view, where the host will automatically appear.
 
-## Use a prepackaged box
+### Prepackaged Virtual Machine Setup
 
 A prepackaged box has been made available which has all the software
 installed and rancher already configured.
@@ -205,6 +217,18 @@ folder of the guest's `Home` directory
 - To access Rancher go to `http://172.17.0.1:8888`
 and login with the user and password `vagrant`
 
+## Package the development environment box
+
+If you want to update the ld-devenv.box file, change your VM as needed,
+open a command prompt/terminal in the root of this repository and run
+the following:
+
+```
+vagrant package --output ld-devenv.box
+```
+
+Go to `O:\ld-devenv` and replace the `ld-devenv.box` file with the
+updated file.
 
 ## Troubleshooting
 
