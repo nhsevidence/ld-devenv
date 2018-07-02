@@ -156,13 +156,13 @@
         state: directory
         mode: 0777
 
-    - name: Add fish shell autorun to bash
-      blockinfile:
-        backup: yes
-        path: ~/.bashrc
-        block: |
-          # run fish
-          fish
+#    - name: Add fish shell autorun to bash
+#      blockinfile:
+#        backup: yes
+#        path: ~/.bashrc
+#        block: |
+#          # run fish
+#          fish
 
     # docker configuration
     - name: Install docker compose
