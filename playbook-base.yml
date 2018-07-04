@@ -80,6 +80,7 @@
         - linux-headers-generic
         - linux-headers-{{kernelversion.stdout}}
         - dkms
+        - cgroup-lite
         - tar
         - gpgv2
         - ca-certificates
