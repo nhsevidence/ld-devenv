@@ -1,7 +1,7 @@
 # Linked-data development environment
 
 This project contains the virtualised development environment for the
-NICE linked data projects.
+NICE linked data projects (e.g. [BNF](https://github.com/nhsevidence/bnf-vnext), [Knowledge Base](https://github.com/nhsevidence/ld-qs-viewer))
 It's an Ubuntu 16.04 LTS desktop virtual machine with several
 programming languages, runtimes and development tools installed.
 It's configured using [Vagrant](https://www.vagrantup.com) and
@@ -58,7 +58,7 @@ It's configured using [Vagrant](https://www.vagrantup.com) and
 ## Prerequisites
 You will need to have the following software installed on your development machine:
 - [Virtualbox v5.x](https://www.virtualbox.org/wiki/Downloads)
-- [Vagrant v2.1.2](https://www.vagrantup.com/downloads.html) NOTE: You will need to deactivate Hyper-V (if enabled) before installing Vagrant.
+- [Vagrant v2.1.2](https://www.vagrantup.com/downloads.html) NOTE: If Hyper-V is enabled, it will need deactivating before installing Vagrant.
 - [SSH keys (see below)](#generate-ssh-keys)
 
 ## Setup
@@ -66,15 +66,15 @@ You will need to have the following software installed on your development machi
 ### Generate SSH keys
 
 - Follow [these instructions](https://help.github.com/articles/connecting-to-github-with-ssh/) to
-generate your SSH keys (if needed) and adding them to Github
+generate your SSH keys (if needed) and add them to Github
 
 
 ### Prepackaged Virtual Machine Setup
 
 A prepackaged box has been made available which has all the software
-installed and rancher already configured.
+installed and rancher already configured. To use this VM, do the following:
 
-- OPTIONAL: To add a shared folder, create one (e.g. 'C:\_src\Shared'). Navigate to the '_src\ld-devenv\prepackaged' directory and open 'Vagrantfile' in a text editor. Uncomment and change the property `config.vm.synced_folder` to the desired folder in
+- (optional) To add a shared folder, create one (e.g. 'C:\_src\Shared'). Navigate to the '_src\ld-devenv\prepackaged' directory and open 'Vagrantfile' in a text editor. Uncomment and change the property `config.vm.synced_folder` to the desired folder in
 your host (left side path)
 	```
 	config.vm.synced_folder "C:\\_src\\Shared", "/home/vagrant/Shared"
@@ -109,8 +109,7 @@ updated file.
 
 ## Usage
 
-You can setup your own VM or use a prepackaged box.
-See below for details on how to use each of these options.
+You can setup your own VM or use a prepackaged box as detailed in the [Setup](#setup) section above.
 
 ### Virtual Machine Setup
 
@@ -151,7 +150,7 @@ successful steps done
 
 ##### Setup Git username and email
 
-Open a terminal in your guest VM and do the following:
+In the Ubuntu VM, open a terminal and do the following:
 
 - Set git username
     ```
