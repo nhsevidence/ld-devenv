@@ -1,7 +1,7 @@
 # Linked-data development environment
 
 This project contains the virtualised development environment for the
-NICE linked data projects.
+NICE linked data projects (e.g. [BNF](https://github.com/nhsevidence/bnf-vnext), [Knowledge Base](https://github.com/nhsevidence/ld-qs-viewer))
 It's an Ubuntu 16.04 LTS desktop virtual machine with several
 programming languages, runtimes and development tools installed.
 It's configured using [Vagrant](https://www.vagrantup.com) and
@@ -13,7 +13,10 @@ It's configured using [Vagrant](https://www.vagrantup.com) and
 
 - [What's in the box](#whats-in-the-box)
 - [Prerequisites](#prerequisites)
+- [Setup](#setup)
   - [Generate SSH keys](#generate-ssh-keys)
+  - [Prepackaged Virtual Machine Setup](#prepackaged-virtual-machine-setup)
+  - [Development environment box updating](#development-environment-box-updating)
 - [Usage](#usage)
   - [Virtual Machine Setup](#virtual-machine-setup)
     - [Copy SSH keys](#copy-ssh-keys)
@@ -22,8 +25,6 @@ It's configured using [Vagrant](https://www.vagrantup.com) and
       - [Setup Git username and email](#setup-git-username-and-email)
       - [Share folders between host and guest VM (optional)](#share-folders-between-host-and-guest-vm-optional)
       - [Setup Rancher container service (optional)](#setup-rancher-container-service-optional)
-  - [Prepackaged Virtual Machine Setup](#prepackaged-virtual-machine-setup)
-- [Package the development environment box](#package-the-development-environment-box)
 - [Troubleshooting](#troubleshooting)
   - [For Windows users](#for-windows-users)
   - [For Mac Users](#for-mac-users)
@@ -55,21 +56,60 @@ It's configured using [Vagrant](https://www.vagrantup.com) and
     - [Rancher Compose 0.12.5](https://rancher.com/docs/rancher/v1.6/en/cattle/rancher-compose/)
 
 ## Prerequisites
-
 You will need to have the following software installed on your development machine:
 - [Virtualbox v5.x](https://www.virtualbox.org/wiki/Downloads)
-- [Vagrant v2.1.2](https://www.vagrantup.com/downloads.html)
-- SSH keys (see below)
+- [Vagrant v2.1.2](https://www.vagrantup.com/downloads.html) NOTE: If Hyper-V is enabled, it will need deactivating before installing Vagrant.
+- [SSH keys (see below)](#generate-ssh-keys)
+
+## Setup
 
 ### Generate SSH keys
 
 - Follow [these instructions](https://help.github.com/articles/connecting-to-github-with-ssh/) to
-generate your SSH keys (if needed) and adding them to Github
+generate your SSH keys (if needed) and add them to Github
+
+
+### Prepackaged Virtual Machine Setup
+
+A prepackaged box has been made available which has all the software
+installed and rancher already configured. To use this VM, do the following:
+
+- (optional) To add a shared folder, create one (e.g. 'C:\_src\Shared'). Navigate to the '_src\ld-devenv\prepackaged' directory and open 'Vagrantfile' in a text editor. Uncomment and change the property `config.vm.synced_folder` to the desired folder in
+your host (left side path)
+	```
+	config.vm.synced_folder "C:\\_src\\Shared", "/home/vagrant/Shared"
+	```
+
+- Go to `O:\ld-devenv` (DS network) and copy the `ld-devenv.box` file to a directory of your choice, e.g. `C:\_src`
+
+- Open a command prompt/terminal and go to that directory
+    ```
+    cd C:\_src
+    ```
+
+- In the command prompt/terminal run
+    ```
+    vagrant box add --name ld-devenv ld-devenv.box
+    ```
+
+
+### Development environment box updating
+
+If you want to update the ld-devenv.box file, change your VM as needed,
+open a command prompt/terminal in the root of this repository and run
+the following:
+
+```
+vagrant package --output ld-devenv.box
+```
+
+Go to `O:\ld-devenv` (DS network) and replace the `ld-devenv.box` file with the
+updated file.
+
 
 ## Usage
 
-You can setup your own VM or use a prepackaged box.
-See below for details on how to use each of these options.
+You can setup your own VM or use a prepackaged box as detailed in the [Setup](#setup) section above.
 
 ### Virtual Machine Setup
 
@@ -80,8 +120,7 @@ See below for details on how to use each of these options.
 
 #### Run the environment
 
-On your host, open a command prompt/terminal in the root of this
-repository and run the following:
+On your host, open a command prompt/terminal and go the `Prepackaged` directory in this this repository and run the following:
 
 - Setup up the environment. The guest VM will start and and Ansible
 will setup the environment.
@@ -101,6 +140,7 @@ successful steps done
 - Login into Ubuntu
     - Select the `vagrant` user
     - Use `vagrant` as the password
+	
 - To use the environment at any time do
     ```
     vagrant up
@@ -110,7 +150,7 @@ successful steps done
 
 ##### Setup Git username and email
 
-Open a terminal in your guest VM and do the following:
+In the Ubuntu VM, open a terminal and do the following:
 
 - Set git username
     ```
@@ -145,6 +185,11 @@ your host (left side path)
 - The contents of your shared folder should appear in the `Shared`
 folder of the guest's `Home` directory
 
+- Copy your [SSH keys](#generate-ssh-keys) to `/home/vagrant/.ssh`. 
+(The `.ssh` directory is hidden by default in the vagrant user `Home` directory.
+In your guest file manager go to *View -> Show Hidden Files* to see it. This is not on the VM window menu, but the one below it. The files can be copied via the shared folder if needed.)
+
+
 ##### Setup Rancher container service (optional)
 
 The Rancher server is installed automatically but you will need to do a
@@ -173,62 +218,6 @@ copying, pasting and running the displayed command in the terminal.
 - When you click *Close* on the Rancher UI, you will be directed back to
 the Infrastructure -> Hosts view, where the host will automatically appear.
 
-### Prepackaged Virtual Machine Setup
-
-A prepackaged box has been made available which has all the software
-installed and rancher already configured.
-
-- To add a shared folder, edit the `Vagrantfile` in prepackaged directory,
-e.g.: `C:\_src\ld-devenv\prepackaged\Vagrantfile`. Uncomment and change
-the property `config.vm.synced_folder` to the desired folder in
-your host (left side path) (Optional)
-
-- Go to `O:\ld-devenv` and copy the `ld-devenv.box` file to a directory of your choice, e.g. `C:\_src`
-
-- Open a command prompt/terminal and go to that directory
-    ```
-    cd C:\_src
-    ```
-
-- In the command prompt/terminal run
-    ```
-    vagrant box add --name ld-devenv ld-devenv.box
-    ```
-
-- Open a command prompt/terminal and go the `Prepackaged` directory of this repository, e.g.:
-    ```
-    cd C:\_src\ld-devenv\prepackaged
-    ```
-
-- In the command prompt/terminal run :
-    ```
-    vagrant up
-    ```
-
-- Copy your SSH keys to `/home/vagrant/.ssh`. (see above for instructions on SSH.
-The `.ssh` directory is hidden by default in the vagrant user `Home` directory.
-In your guest file manager go to *View -> Show Hidden Files* to see it)
-
-- Setup your git username and email (see above for instructions)
-
-- The contents of your shared folder should appear in the `Shared`
-folder of the guest's `Home` directory
-
-- To access Rancher go to `http://172.17.0.1:8888`
-and login with the user and password `vagrant`
-
-## Package the development environment box
-
-If you want to update the ld-devenv.box file, change your VM as needed,
-open a command prompt/terminal in the root of this repository and run
-the following:
-
-```
-vagrant package --output ld-devenv.box
-```
-
-Go to `O:\ld-devenv` and replace the `ld-devenv.box` file with the
-updated file.
 
 ## Troubleshooting
 
@@ -246,6 +235,8 @@ updated file.
 - Gedit (the default text editor) isn't able to save files to shared folders.
 
     Use Sublime Text or Mono Develop when editing files in the shared folders.
+	
+- If Hyper-V is installed, deactivate it before continuing
 
 ### For Mac Users
 If you are setting this up on a mac for the first time with virtualbox
