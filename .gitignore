@@ -1,1 +1,9 @@
 .vagrant/
+.idea
+/id_rsa
+/id_rsa.pub
+/ld-devenv.box
+/playbook-base.retry
+/playbook-bnf.retry
+/.Vagrantfile.swp
+/.Trash-1000/

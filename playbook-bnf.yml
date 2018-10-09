@@ -1,0 +1,79 @@
+- name: vagrant provision ld-devenv bnf
+  hosts: ld-devenv
+  remote_user: vagrant
+  tasks:
+
+    # Get bnf source code
+    - name: Create bnf directory
+      file:
+        dest: ~/bnf/
+        state: directory
+
+    - name: Create ld-bnf directory
+      file:
+        dest: ~/ld-bnf/
+        state: directory
+
+    - name: Create ld-bnf directory
+      file:
+        dest: ~/bnf-search/
+        state: directory
+
+    - name: Clone BNF-vNext from github
+      git:
+        repo: 'git@github.com:nhsevidence/BNF-vNext.git'
+        dest: ~/bnf
+        clone: yes
+        update: yes
+        accept_hostkey: yes
+
+    - name: Clone ld-bnf from github
+      git:
+        repo: 'git@github.com:nhsevidence/ld-bnf.git'
+        dest: ~/ld-bnf
+        clone: yes
+        update: yes
+        accept_hostkey: yes
+
+    - name: Clone BNF-Search from github
+      git:
+        repo: 'git@github.com:nhsevidence/BNF-Search.git'
+        dest: ~/bnf-search
+        clone: yes
+        update: yes
+        accept_hostkey: yes
+
+    # Build and run BNF
+    - name: Run BNF stack
+      become: yes
+      command: /home/vagrant/bnf/run.sh
+      args:
+        chdir: /home/vagrant/bnf/
+        removes: /home/vagrant/bnf/run.sh
+
+    - name: Update BNF containers restart policy
+      become: yes
+      command: "{{item}}"
+      with_items:
+        - docker update --restart=always bnf_build_1
+        - docker update --restart=always bnf_search_1
+        - docker update --restart=always bnf_website_1
+        - docker update --restart=always bnf_elastic_1
+        - docker update --restart=always bnf_stardog_1
+
+    - name: Run BNF build process
+      become: yes
+      command: "{{item}}"
+      with_items:
+        - docker exec bnf_build_1 ./build.sh
+        - docker exec bnf_build_1 ./populate-elastic.sh
+
+    - name: Run ElasticHQ container
+      docker_container:
+        name: elastichq
+        image: elastichq/elasticsearch-hq
+        restart_policy: always
+        ports:
+          - "5000:5000"
+        env:
+          HQ_DEFAULT_URL: "http://172.17.0.1:9200/"

@@ -1,0 +1,255 @@
+- name: vagrant provision ld-devenv base
+  hosts: ld-devenv
+  remote_user: vagrant
+  tasks:
+
+    # apt nodejs
+    - name: Add node apt key
+      become: yes
+      apt_key:
+        url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+        state: present
+
+    - name: Add node repository
+      become: yes
+      apt_repository:
+        repo: deb https://deb.nodesource.com/node_8.x xenial main
+        state: present
+
+    # apt mono
+    - name: Add mono apt key
+      become: yes
+      apt_key:
+        keyserver: keyserver.ubuntu.com
+        id: 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+
+    - name: Add mono repository
+      become: yes
+      apt_repository:
+        repo: deb https://download.mono-project.com/repo/ubuntu stable-xenial main
+        state: present
+
+    # apt sublime text
+    - name: Add sublime text apt key
+      become: yes
+      apt_key:
+        url: https://download.sublimetext.com/sublimehq-pub.gpg
+
+    - name: Add sublime text repository
+      become: yes
+      apt_repository:
+        repo: deb https://download.sublimetext.com/ apt/stable/
+        state: present
+
+    # apt docker
+    - name: Add docker apt key
+      become: yes
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+
+    - name: Add docker repository
+      become: yes
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+        state: present
+
+    # apt fish shell
+    - name: Add Fish shell repository
+      become: yes
+      apt_repository:
+        validate_certs: no
+        repo: ppa:fish-shell/release-2
+        state: present
+
+    # install packages
+    - name: Update repositories cache
+      become: yes
+      apt:
+        update_cache: yes
+
+    - name: Get kernel version
+      shell: uname -r
+      register: kernelversion
+
+    - name: Install essential packages with apt
+      become: yes
+      apt: name={{item}} state=present install_recommends=yes
+      with_items:
+        - apt-transport-https
+        - build-essential
+        - linux-headers-generic
+        - linux-headers-{{kernelversion.stdout}}
+        - dkms
+        - cgroup-lite
+        - tar
+        - gpgv2
+        - ca-certificates
+        - wget
+        - curl
+        - make
+        - gcc
+        - perl
+        - openssl
+        - g++
+        - software-properties-common
+        - python
+        - python-pip
+        - ubuntu-desktop
+
+    - name: Install dev packages with apt
+      become: yes
+      apt: name={{item}} state=present
+      with_items:
+        - git
+        - ca-certificates-mono
+        - mono-devel
+        - mono-complete
+        - mono-vbnc
+        - nuget
+        - monodevelop
+        - monodevelop-nunit
+        - fsharp
+        - raptor-utils
+        - nodejs
+        - sublime-text
+        - docker-ce=17.03.2~ce-0~ubuntu-xenial
+        - zsh
+        - fish
+
+    - name: Block docker updates
+      become: yes
+      command: apt-mark hold docker-ce
+
+    - name: Remove packages with apt
+      become: yes
+      apt: name={{item}} state=absent
+      with_items:
+        - unity-webapps-common
+        - libreoffice*
+
+    # environment setup
+    - name: Disable firewall inside VM
+      become: yes
+      ufw:
+        state: disabled
+
+    - name: Install UK locale
+      become: yes
+      locale_gen:
+        name: en_GB.UTF-8
+        state: present
+
+    - name: Timezone to Europe/London
+      become: yes
+      timezone:
+        name: Europe/London
+
+    - name: set locale
+      become: yes
+      command: "{{item}}"
+      with_items:
+        - localectl set-locale LANG=en_GB.utf8
+        - localectl set-x11-keymap "gb"
+
+    - name: Create shared directory
+      file:
+        dest: ~/Shared/
+        state: directory
+        mode: 0777
+
+#    - name: Add fish shell autorun to bash
+#      blockinfile:
+#        backup: yes
+#        path: ~/.bashrc
+#        block: |
+#          # run fish
+#          fish
+
+    # docker configuration
+    - name: Install docker compose
+      become: yes
+      pip:
+        name: docker-compose
+
+    - name: Create docker group
+      become: yes
+      group:
+        name: docker
+        state: present
+
+    - name: Add vagrant to docker group
+      become: yes
+      user:
+        name: vagrant
+        groups: docker
+        append: yes
+
+    - name: Enable docker service
+      become: yes
+      service:
+        name: docker
+        enabled: yes
+
+    - name: Startup docker service
+      become: yes
+      service:
+        name: docker
+        state: started
+
+    # Setup SSH keys
+    - name: Create ssh directory
+      file:
+        dest: ~/.ssh/
+        state: directory
+
+    - name: Copy id_rsa
+      copy:
+        src: /vagrant/id_rsa
+        dest: ~/.ssh/id_rsa
+        mode: 0600
+
+    - name: Copy id_rsa.pub
+      copy:
+        src: /vagrant/id_rsa.pub
+        dest: ~/.ssh/id_rsa.pub
+        mode: 0600
+
+    - name: Set authorized key from file
+      authorized_key:
+        user: vagrant
+        state: present
+        key: "{{ lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"
+
+    #  Setup Rancher
+    - name: Creates Rancher Compose directory
+      file:
+        path: /home/vagrant/rancher-compose
+        state: directory
+
+    - name: Unarchive Rancher Compose
+      unarchive:
+        src: https://github.com/rancher/rancher-compose/releases/download/v0.12.5/rancher-compose-linux-amd64-v0.12.5.tar.gz
+        dest: /home/vagrant/rancher-compose
+        remote_src: yes
+
+    - name: Copy Rancher Compose to local bin
+      become: yes
+      copy:
+        src: /home/vagrant/rancher-compose/rancher-compose-v0.12.5/rancher-compose
+        dest: /usr/local/bin/rancher-compose
+        mode: 0755
+        remote_src: yes
+
+    - name: Remove Rancher Compose home directory
+      file:
+        path: /home/vagrant/rancher-compose
+        state: absent
+
+    - name: Run Rancher 1.6
+      become: yes
+      docker_container:
+        name: rancher
+        restart_policy: always
+        image: rancher/server
+        ports:
+          - "8888:8080"

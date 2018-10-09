@@ -1,36 +1,37 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-VAGRANTFILE_API_VERSION = "2"
-CONFIG_SSH_PUB = File.join(File.dirname(__FILE__), "~/.ssh/id_rsa.pub")
-CONFIG_SSH_PRI = File.join(File.dirname(__FILE__), "~/.ssh/id_rsa")
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "box-cutter/ubuntu1404-desktop"
-  config.vm.provider "virtualbox" do |v|
-    v.name = "ld-devenv"
-    v.memory = 4096
-    v.cpus = 2
-    v.gui = true
-  end
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "bento/ubuntu-16.04"
+  config.vm.box_version = "201806.08.0"
+
   config.vm.hostname = "ld-devenv"
-	config.vm.provision "file", source: "dotfiles/bashrc", destination: ".bashrc"
-  config.vm.provision "shell", path: "bootstrap_sudo.sh"
-  # config.vm.provision "shell", path: "bootstrap.sh", privileged: false
-  if !ENV["GIT_SSH_PUBLIC"].nil?
-    config.vm.provision "file", source: ENV["GIT_SSH_PUBLIC"], destination: "~/.ssh/id_rsa.pub"
-  else
-    if File.exists?(CONFIG_SSH_PUB)
-      config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
-    end
+
+  config.vm.define "ld-devenv" do |ld_devenv|
   end
-  if !ENV["GIT_SSH_PRIVATE"].nil?
-    config.vm.provision "file", source: ENV["GIT_SSH_PRIVATE"], destination: "~/.ssh/id_rsa"
-  else
-    if File.exists?(CONFIG_SSH_PRI)
-      config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
-    end
+
+  #config.vm.synced_folder "C:\\_src\\Shared", "/home/vagrant/Shared"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "ld-devenv"
+    vb.gui = true
+    vb.memory = 6100
+    vb.cpus = 2
+    vb.customize ["modifyvm", :id, "--vram", "32"]
+    vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+    vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+    vb.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", "1", "--device", "0", "--type", "dvddrive", "--medium", "emptydrive"]
   end
-  if !ENV["VAGRANT_SYNC_SRC"].nil? && !ENV["VAGRANT_SYNC_DEST"].nil?
-    config.vm.synced_folder ENV["VAGRANT_SYNC_SRC"], ENV["VAGRANT_SYNC_DEST"]
+
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.playbook = "playbook-base.yml"
+    ansible.verbose = true
   end
+
+  #config.vm.provision "ansible_local" do |ansible|
+  #  ansible.playbook = "playbook-bnf.yml"
+  #  ansible.verbose = true
+  #end
+
 end
