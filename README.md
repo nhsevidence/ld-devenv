@@ -86,7 +86,9 @@ your host (left side path)
     ```
     cd C:\_src
     ```
-
+    
+- Download the latest vagrant (2.2.3)
+       
 - In the command prompt/terminal run
     ```
     vagrant box add --name ld-devenv ld-devenv.box
